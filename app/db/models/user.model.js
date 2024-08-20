@@ -24,6 +24,7 @@ const init = async (sequelize) => {
         unique: true,
         validate: {
           notEmpty: true,
+          is: { args: /^[0-9A-Za-z]{3,16}$/, msg: "Enter valid username!" },
         },
       },
       email: {
@@ -78,6 +79,9 @@ const init = async (sequelize) => {
           values: ["admin", "user"],
         }),
         defaultValue: "user",
+        validate: {
+          isIn: [["admin", "user"]],
+        },
       },
       isVerified: {
         type: DataTypes.BOOLEAN,
