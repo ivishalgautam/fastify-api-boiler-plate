@@ -1,5 +1,5 @@
 export const schema = {
-  signup: {
+  create: {
     body: {
       type: "object",
       properties: {
@@ -23,5 +23,12 @@ export const schema = {
         "role",
       ],
     },
+  },
+  checkParam: {
+    type: "object",
+    properties: {
+      id: { type: "string", format: "uuid" },
+    },
+    required: ["id"],
   },
 };
