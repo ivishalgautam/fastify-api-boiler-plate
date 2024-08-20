@@ -21,7 +21,10 @@ const init = async (sequelize) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
+        unique: {
+          args: true,
+          msg: "Username already in use!",
+        },
         validate: {
           notEmpty: true,
           is: { args: /^[0-9A-Za-z]{3,16}$/, msg: "Enter valid username!" },
@@ -43,6 +46,10 @@ const init = async (sequelize) => {
         allowNull: false,
         validate: {
           notEmpty: true,
+        },
+        unique: {
+          args: true,
+          msg: "Mobile number already in use!",
         },
       },
       countryCode: {
