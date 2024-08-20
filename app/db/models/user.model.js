@@ -37,14 +37,14 @@ const init = async (sequelize) => {
           msg: "Email address already in use!",
         },
       },
-      mobile_number: {
+      mobileNumber: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: true,
         },
       },
-      country_code: {
+      countryCode: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -69,7 +69,7 @@ const init = async (sequelize) => {
           notEmpty: true,
         },
       },
-      is_active: {
+      isActive: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
@@ -79,20 +79,19 @@ const init = async (sequelize) => {
         }),
         defaultValue: "user",
       },
-      is_verified: {
+      isVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      reset_password_token: {
+      resetPasswordToken: {
         type: DataTypes.STRING,
       },
-      confirmation_token: {
+      confirmationToken: {
         type: DataTypes.STRING,
       },
     },
     {
-      createdAt: "created_at",
-      updatedAt: "updated_at",
+      timestamps: true,
     }
   );
 
@@ -107,8 +106,8 @@ const create = async (req) => {
     firstname: req.body?.firstname,
     lastname: req.body?.lastname,
     email: req.body?.email,
-    mobile_number: req.body?.mobile_number,
-    country_code: req.body?.country_code.replace(/\s/g, ""),
+    mobileNumber: req.body?.mobileNumber,
+    countryCode: req.body?.countryCode.replace(/\s/g, ""),
     role: req.body?.role,
   });
 };
@@ -118,7 +117,7 @@ const get = async () => {
     where: { role: "user" },
     order: [["created_at", "DESC"]],
     attributes: {
-      exclude: ["password", "reset_password_token", "confirmation_token"],
+      exclude: ["password", "resetPasswordToken", "confirmationToken"],
     },
   });
 };
@@ -136,11 +135,11 @@ const getById = async (req, user_id) => {
       "firstname",
       "lastname",
       "password",
-      "is_active",
+      "isActive",
       "role",
-      "mobile_number",
-      "country_code",
-      "is_verified",
+      "mobileNumber",
+      "countryCode",
+      "isVerified",
     ],
   });
 };
@@ -158,11 +157,11 @@ const getByUsername = async (req, record = undefined) => {
       "firstname",
       "lastname",
       "password",
-      "is_active",
+      "isActive",
       "role",
-      "mobile_number",
-      "country_code",
-      "is_verified",
+      "mobileNumber",
+      "countryCode",
+      "isVerified",
     ],
   });
 };
@@ -174,8 +173,8 @@ const update = async (req) => {
       firstname: req.body?.firstname,
       lastname: req.body?.lastname,
       email: req.body?.email,
-      mobile_number: req.body?.mobile_number,
-      country_code: req.body?.country_code.replace(/\s/g, ""),
+      mobileNumber: req.body?.mobileNumber,
+      countryCode: req.body?.countryCode.replace(/\s/g, ""),
 
       role: req.body?.role,
     },
@@ -189,11 +188,11 @@ const update = async (req) => {
         "email",
         "firstname",
         "lastname",
-        "is_active",
+        "isActive",
         "role",
-        "mobile_number",
-        "country_code",
-        "is_verified",
+        "mobileNumber",
+        "countryCode",
+        "isVerified",
       ],
       plain: true,
     }
@@ -260,7 +259,7 @@ const getByEmailId = async (req) => {
 const getByResetToken = async (req) => {
   return await UserModel.findOne({
     where: {
-      reset_password_token: req.params.token,
+      resetPasswordToken: req.params.token,
     },
   });
 };
@@ -278,7 +277,7 @@ const getByUserIds = async (user_ids) => {
 const updateStatus = async (id, status) => {
   const [rowCount, rows] = await UserModel.update(
     {
-      is_active: status,
+      isActive: status,
     },
     {
       where: {
@@ -290,11 +289,11 @@ const updateStatus = async (id, status) => {
         "email",
         "firstname",
         "lastname",
-        "is_active",
+        "isActive",
         "role",
-        "mobile_number",
-        "country_code",
-        "is_verified",
+        "mobileNumber",
+        "countryCode",
+        "isVerified",
       ],
       plain: true,
       raw: true,
@@ -307,7 +306,7 @@ const updateStatus = async (id, status) => {
 const verify = async ({ user_id, status }) => {
   const [rowCount, rows] = await UserModel.update(
     {
-      is_verified: status,
+      isVerified: status,
     },
     {
       where: {
