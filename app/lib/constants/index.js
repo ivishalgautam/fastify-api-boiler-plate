@@ -61,6 +61,19 @@ const constants = {
     TOKEN_EXPIRES_IN: 15 * 6000000, // 15 * 1 minute = 15 minutes
     REFRESH_TOKEN_EXPIRES_IN: "1d", // 1 day
   },
+  mime: {
+    imageMime: ["jpeg", "jpg", "png", "gif", "webp"],
+    videoMime: ["mp4", "mpeg", "ogg", "webm", "m4v", "mov", "mkv"],
+    docsMime: [
+      "pdf",
+      "ppt",
+      "pptx",
+      "docx",
+      "application/msword",
+      "msword",
+      "vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ],
+  },
 };
 
 export default constants;

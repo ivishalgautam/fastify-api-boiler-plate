@@ -6,44 +6,36 @@ import crypto from "crypto";
 import { sendOtp } from "../../helpers/interaktApi.js";
 
 const create = async (req, res) => {
-  // console.log(req.decoded.user.id);
-  try {
-    const user = await table.UserModel.getById(
-      req,
-      req.user_data?.id || req.decoded.user.id
-    );
-    const otp = crypto.randomInt(100000, 999999);
-    const record = await table.OtpModel.getByUserId(user?.id);
+  const user = await table.UserModel.getById(
+    req,
+    req.user_data?.id || req.decoded.user.id
+  );
+  const otp = crypto.randomInt(100000, 999999);
+  const record = await table.OtpModel.getByUserId(user?.id);
 
-    const resp = await sendOtp({
-      country_code: user.country_code,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      mobile_number: user.mobile_number,
-      otp: otp,
-    });
+  const resp = await sendOtp({
+    country_code: user.country_code,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    mobile_number: user.mobile_number,
+    otp: otp,
+  });
 
-    if (resp.data.result) {
-      if (record) {
-        await table.OtpModel.update({
-          user_id: req.user_data?.id || req.decoded.user.id,
-          otp: otp,
-        });
-      } else {
-        await table.OtpModel.create({
-          user_id: req.user_data?.id || req.decoded.user.id,
-          otp: otp,
-        });
-      }
+  if (resp.data.result) {
+    if (record) {
+      await table.OtpModel.update({
+        user_id: req.user_data?.id || req.decoded.user.id,
+        otp: otp,
+      });
+    } else {
+      await table.OtpModel.create({
+        user_id: req.user_data?.id || req.decoded.user.id,
+        otp: otp,
+      });
     }
-
-    res.send({ status: true, message: "Otp sent" });
-  } catch (error) {
-    console.error(error);
-    res
-      .code(constants.http.status.INTERNAL_SERVER_ERROR)
-      .send({ status: false, error });
   }
+
+  res.send({ status: true, message: "Otp sent" });
 };
 
 const verify = async (req, res) => {

@@ -1,7 +1,7 @@
 "use strict";
 import constants from "../../lib/constants/index.js";
 import hash from "../../lib/encryption/index.js";
-import sequelizeFwk from "sequelize";
+import { DataTypes } from "sequelize";
 import { Op } from "sequelize";
 import moment from "moment";
 
@@ -14,55 +14,80 @@ const init = async (sequelize) => {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: sequelizeFwk.DataTypes.UUID,
-        defaultValue: sequelizeFwk.DataTypes.UUIDV4,
-      },
-      username: {
-        type: sequelizeFwk.DataTypes.STRING,
-        allowNull: false,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         unique: true,
       },
-      email: {
-        type: sequelizeFwk.DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true,
+        },
+        unique: {
+          args: true,
+          msg: "Email address already in use!",
+        },
       },
       mobile_number: {
-        type: sequelizeFwk.DataTypes.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       country_code: {
-        type: sequelizeFwk.DataTypes.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
-      first_name: {
-        type: sequelizeFwk.DataTypes.STRING,
+      firstname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
-      last_name: {
-        type: sequelizeFwk.DataTypes.STRING,
+      lastname: {
+        type: DataTypes.STRING,
+        defaultValue: "",
       },
       password: {
-        type: sequelizeFwk.DataTypes.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       is_active: {
-        type: sequelizeFwk.DataTypes.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       role: {
-        type: sequelizeFwk.DataTypes.ENUM({
+        type: DataTypes.ENUM({
           values: ["admin", "user"],
         }),
         defaultValue: "user",
       },
       is_verified: {
-        type: sequelizeFwk.DataTypes.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
       reset_password_token: {
-        type: sequelizeFwk.DataTypes.STRING,
+        type: DataTypes.STRING,
       },
       confirmation_token: {
-        type: sequelizeFwk.DataTypes.STRING,
+        type: DataTypes.STRING,
       },
     },
     {
@@ -79,8 +104,8 @@ const create = async (req) => {
   return await UserModel.create({
     username: req.body.username,
     password: hash_password,
-    first_name: req.body?.first_name,
-    last_name: req.body?.last_name,
+    firstname: req.body?.firstname,
+    lastname: req.body?.lastname,
     email: req.body?.email,
     mobile_number: req.body?.mobile_number,
     country_code: req.body?.country_code.replace(/\s/g, ""),
@@ -108,8 +133,8 @@ const getById = async (req, user_id) => {
       "id",
       "username",
       "email",
-      "first_name",
-      "last_name",
+      "firstname",
+      "lastname",
       "password",
       "is_active",
       "role",
@@ -130,8 +155,8 @@ const getByUsername = async (req, record = undefined) => {
       "id",
       "username",
       "email",
-      "first_name",
-      "last_name",
+      "firstname",
+      "lastname",
       "password",
       "is_active",
       "role",
@@ -146,8 +171,8 @@ const update = async (req) => {
   return await UserModel.update(
     {
       username: req.body?.username,
-      first_name: req.body?.first_name,
-      last_name: req.body?.last_name,
+      firstname: req.body?.firstname,
+      lastname: req.body?.lastname,
       email: req.body?.email,
       mobile_number: req.body?.mobile_number,
       country_code: req.body?.country_code.replace(/\s/g, ""),
@@ -162,8 +187,8 @@ const update = async (req) => {
         "id",
         "username",
         "email",
-        "first_name",
-        "last_name",
+        "firstname",
+        "lastname",
         "is_active",
         "role",
         "mobile_number",
@@ -263,8 +288,8 @@ const updateStatus = async (id, status) => {
         "id",
         "username",
         "email",
-        "first_name",
-        "last_name",
+        "firstname",
+        "lastname",
         "is_active",
         "role",
         "mobile_number",

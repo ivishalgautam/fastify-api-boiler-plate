@@ -1,6 +1,6 @@
 "use strict";
 import constants from "../../lib/constants/index.js";
-import { DataTypes, QueryTypes, Deferrable } from "sequelize";
+import { DataTypes, Deferrable } from "sequelize";
 
 let OtpModel = null;
 
@@ -24,10 +24,16 @@ const init = async (sequelize) => {
           key: "id",
           deferrable: Deferrable.INITIALLY_IMMEDIATE,
         },
+        validate: {
+          isUUID: true,
+        },
       },
       otp: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
     },
     {
