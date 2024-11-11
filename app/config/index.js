@@ -17,17 +17,10 @@ const config = {
   // jwt secret key
   jwt_secret: process.env.JWT_SECRET,
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
-  smtp_from_email: process.env.SMTP_EMAIL || "tech.bdseducation@gmail.com",
-  smtp_port: parseInt(process.env.SMTP_PORT) || 465,
-  smtp_host: process.env.SMTP_SERVER || "smtp.gmail.com",
-  smtp_password: process.env.SMTP_PASSWORD || "fzblfszihsuwmphl",
-
-  // zoom creds
-  zoom_client_id: process.env.ZOOM_CLIENT_ID,
-  zoom_client_secret: process.env.ZOOM_CLIENT_SECRET,
-  zoom_account_id: process.env.ZOOM_ACCOUNT_ID,
-  zoom_oauth_url: process.env.ZOOM_OAUTH_URL,
-  zoom_base_url: process.env.ZOOM_BASE_URL,
+  smtp_from_email: process.env.SMTP_EMAIL,
+  smtp_port: parseInt(process.env.SMTP_PORT),
+  smtp_host: process.env.SMTP_SERVER,
+  smtp_password: process.env.SMTP_PASSWORD,
 };
 
 export default config;
